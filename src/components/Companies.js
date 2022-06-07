@@ -14,7 +14,6 @@ function Companies() {
   const { data, loading, error } = useQuery(GET_COMPANIES);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
   return data.companies.map((company) => (
     <div key={company.id}>
       <p>
