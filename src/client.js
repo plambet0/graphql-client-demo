@@ -1,23 +1,25 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import gql from 'graphql-tag';
-
-const link = new HttpLink({uri: 'http://localhost:4000/'})
-
-const cache = new InMemoryCache();
+import {
+  ApolloClient,
+  InMemoryCache,
+  gql
+} from "@apollo/client";
 
 const client = new ApolloClient({
-    link,
-    cache
-})
-const query = gql`
-{
-    companies{
-      name
-    }
-}
-`
-client.query({query})
-.then(result => console.log(result))
+  uri: 'http://localhost:4000/',
+  cache: new InMemoryCache()
+});
+
+client
+  .query({
+    query: gql`
+      query getCompanies {
+        companies{
+          id
+          name
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
+
 export default client;

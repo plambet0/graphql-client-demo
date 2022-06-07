@@ -1,8 +1,10 @@
-import './App.css';
-
+import Companies from './components/Companies';
 function App() {
   return (
-    <div>Hello Plamen</div>
+    <div>
+      <h2>Companies</h2>
+      <Companies />
+    </div>
   );
 }
 
