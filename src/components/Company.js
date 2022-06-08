@@ -1,5 +1,7 @@
 import classes from './Company.module.css';
 import Card from './layout/Card';
+
+
 function Company(props) {
   return (
     <li className={classes.company}>
