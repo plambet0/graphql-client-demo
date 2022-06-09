@@ -1,7 +1,7 @@
 import Card from './layout/Card';
 import classes from './NewCompanyForm.module.css';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
 
 const CREATE_COMPANY = gql`
@@ -18,7 +18,8 @@ function NewCompanyForm() {
   const [companyType, setCompanyType] = useState('');
   const [mktActivity, setMktActivity] = useState('');
   const [membership, setMembership] = useState('');
-  const [epraWatchIndex, setEpraWatchIndex] = useState('');
+  const [memberIndex, setmemberIndex] = useState('');
+  const [isMainMember, setisMainMember] = useState('');
   const [addCompany, { error }] = useMutation(CREATE_COMPANY);
 
   const handleAddCompany = () => {
@@ -28,8 +29,8 @@ function NewCompanyForm() {
           name: companyName,
           company_type_id: parseInt(companyType),
           market_activity_id: parseInt(mktActivity),
-          member_index: Boolean(epraWatchIndex),
-          is_main_member: Boolean(epraWatchIndex),
+          member_index: Boolean(memberIndex),
+          is_main_member: Boolean(isMainMember),
           membership_id: parseInt(membership)
         }
       }
@@ -82,7 +83,7 @@ function NewCompanyForm() {
             required
             id="member_index"
             onChange={(e) => {
-              setEpraWatchIndex(e.target.value);
+              setmemberIndex(e.target.value);
             }}
           />
         </div>
@@ -93,7 +94,7 @@ function NewCompanyForm() {
             required
             id="is_main_member"
             onChange={(e) => {
-              setEpraWatchIndex(e.target.value);
+              setisMainMember(e.target.value);
             }}
           />
         </div>
