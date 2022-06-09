@@ -3,10 +3,11 @@ import classes from './UpdateCompanyForm.module.css';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const UPDATE_COMPANY = gql`
-  mutation addCompany($id: Int!, $input: UpdateCompanyInput!) {
-    addCompany(id: $id, input: $input) {
+  mutation updateCompany($id: Int!, $input: UpdateCompanyInput!) {
+    updateCompany(id: $id, input: $input) {
       id
       name
     }
@@ -20,12 +21,12 @@ function UpdateCompanyForm() {
   const [membership, setMembership] = useState('');
   const [memberIndex, setmemberIndex] = useState('');
   const [isMainMember, setisMainMember] = useState('');
-  const [updateCompany, { error }] = useMutation(UPDATE_COMPANY);
-
-  const handleUpdateCompany = () => {
+  const [updateCompany] = useMutation(UPDATE_COMPANY);
+  const { id } = useParams();
+  const updateCompanyFunc = (id) => {
     updateCompany({
       variables: {
-        id: id,
+        id: parseInt(id),
         input: {
           name: companyName,
           company_type_id: parseInt(companyType),
@@ -38,13 +39,10 @@ function UpdateCompanyForm() {
     });
   };
 
-  if (error) {
-    console.log(error);
-  }
   return (
     <Card>
       <form className={classes.form}>
-        <div className={classes.control}>
+        <div className={classes.control}>``
           <label htmlFor="name">COMPANY NAME</label>
           <input
             type="text"
@@ -111,7 +109,7 @@ function UpdateCompanyForm() {
           />
         </div>
         <div className={classes.actions}>
-          <button onClick={handleUpdateCompany}>CREATE COMPANY</button>
+          <button onClick={() => updateCompanyFunc(id)}>UPDATE COMPANY</button>
         </div>
       </form>
     </Card>

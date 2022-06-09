@@ -2,6 +2,7 @@ import classes from './Company.module.css';
 import Card from './layout/Card';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
+import { Link } from 'react-router-dom';
 
 const DELETE_COMPANY = gql`
   mutation deleteCompany($id: Int!) {
@@ -28,7 +29,9 @@ function Company(props) {
           {/* <p>COMPANY_TYPE: {props.companyType}</p> */}
         </div>
         <div className={classes.actions}>
-          <button className={classes.update}>UPDATE COMPANY</button>
+          <Link to={`/updateCompany/${props.id}`}>
+            <button className={classes.update}>UPDATE COMPANY</button>
+          </Link>
           <button onClick={() => deleteCompanyFunc(props.id)}>DELETE COMPANY</button>
         </div>
       </Card>
