@@ -26,7 +26,11 @@ function Company(props) {
         <div className={classes.content}>
           <p>ID: {props.id}</p>
           <p>NAME: {props.name}</p>
-          {/* <p>COMPANY_TYPE: {props.companyType}</p> */}
+          <p>COMPANY TYPE: {props.company_type.name}</p>
+          <p>MEMBERSHIP: {props.membership.name}</p>
+          <p>MEMBER INDEX: {props.member_index}</p>
+          <p>IS MAIN MEMBER: {props.is_main_member}</p>
+          <p>MARKET ACTIVITY: {props.market_activity.name}</p>
         </div>
         <div className={classes.actions}>
           <Link to={`/updateCompany/${props.id}`}>

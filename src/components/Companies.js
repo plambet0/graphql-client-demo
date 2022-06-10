@@ -5,14 +5,21 @@ import Company from './Company';
 
 const GET_COMPANIES = gql`
   query getCompanies {
-    companies {
-      id
+  companies{
+    id
+    company_type{
       name
-    #   companyType {
-    #     name
-    #   }
+    }
+    membership{
+      name
+    }
+    member_index
+    is_main_member
+    market_activity{
+      name
     }
   }
+}
 `;
 
 function Companies() {
@@ -22,13 +29,8 @@ function Companies() {
 
   return (
     <ul className={classes.list}>
-      {data.companies.map((company) => (
-        <Company
-          key={company.id}
-          id={company.id}
-          name={company.name}
-          //companyType={company.companyType.name}
-        />
+      {data.companies.map((info) => (
+        <Company {...info} />
       ))}
     </ul>
   );
