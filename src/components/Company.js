@@ -21,7 +21,7 @@ function Company(props) {
     });
   };
   return (
-    <li className={classes.company}>
+    <li key={props.id} className={classes.company}>
       <Card>
         <div className={classes.content}>
           <p>ID: {props.id}</p>
