@@ -33,7 +33,7 @@ function Companies() {
 
   return (
     <div>
-      <TextField placeholder='Enter Company Name Here ...' onChange={(e) => {setQuery(e.target.value)}} />
+      <TextField placeholder='Search by Name  ...' onChange={(e) => {setQuery(e.target.value)}} />
       <ul className={classes.list}>
         {data.companies.filter(info => {
           if (query === ''){

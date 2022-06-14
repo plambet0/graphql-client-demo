@@ -1,10 +1,8 @@
-import Card from './layout/Card';
 import classes from './NewCompanyForm.module.css';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Grid } from '@material-ui/core';
-import MainNavigation from './layout/MainNavigation';
 
 const CREATE_COMPANY = gql`
   mutation addCompany($input: AddCompanyInput!) {
@@ -15,7 +13,9 @@ const CREATE_COMPANY = gql`
   }
 `;
 
-function NewCompanyForm() {
+
+
+function NewCompanyForm({handleClose}) {
   const [companyName, setCompanyName] = useState('');
   const [companyType, setCompanyType] = useState('');
   const [mktActivity, setMktActivity] = useState('');
@@ -38,6 +38,7 @@ function NewCompanyForm() {
       }
     });
   };
+
 
   if (error) {
     console.log(error);
@@ -159,14 +160,14 @@ function NewCompanyForm() {
             </Grid>
             <Grid container style={{ marginTop: '115px', marginBottom: '40px' }}>
               <Grid item xs={12} style={{ textAlign: 'center' }}>
-              {/* <Button
-              id="cancel-new-company-button"
-              data-testid="cancel-new-company-button"
-              className={classes.cancelButton}
-              onClick={() => { <MainNavigation/>}}
+              <Button
+                id="cancel-new-company-button"
+                data-testid="cancel-new-company-button"
+                className={classes.cancelButton}
+                onClick={handleClose}
             >
               Cancel
-              </Button> */}
+              </Button>
                 <Button
                   id="create-new-company-button"
                   data-testid="create-new-company-button"

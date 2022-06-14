@@ -34,7 +34,7 @@ function MainNavigation() {
       </header>
       <body>
         <div>{loadCompanies ? <Companies /> : <></>}</div>
-        <div>{loadNewCompanyForm ? <NewCompanyForm /> : <></>}</div>
+        {loadNewCompanyForm && <NewCompanyForm handleClose={() => setloadNewCompanyForm(false)}/>}
       </body>
     </>
   );
