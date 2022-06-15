@@ -2,7 +2,7 @@ import classes from './MainNavigation.module.css';
 import Companies from '../Companies';
 import { useState } from 'react';
 import { Button } from '@material-ui/core';
-import NewCompanyForm from '../NewCompanyForm';
+import CompanyForm from '../CompanyForm';
 
 function MainNavigation() {
   const [loadCompanies, setLoadCompanies] = useState(false);
@@ -32,10 +32,10 @@ function MainNavigation() {
           </ul>
         </nav>
       </header>
-      <body>
+      <div>
         <div>{loadCompanies ? <Companies /> : <></>}</div>
-        {loadNewCompanyForm && <NewCompanyForm handleClose={() => setloadNewCompanyForm(false)}/>}
-      </body>
+        {loadNewCompanyForm && <CompanyForm handleClose={() => setloadNewCompanyForm(false)}/>}
+      </div>
     </>
   );
 }

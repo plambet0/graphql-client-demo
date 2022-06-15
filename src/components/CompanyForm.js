@@ -1,4 +1,3 @@
-import classes from './NewCompanyForm.module.css';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
@@ -13,38 +12,55 @@ const CREATE_COMPANY = gql`
   }
 `;
 
+const UPDATE_COMPANY = gql`
+  mutation updateCompany($id: Int!, $input: UpdateCompanyInput!) {
+    updateCompany(id: $id, input: $input) {
+      id
+      name
+    }
+  }
+`;
 
+function CompanyForm({ handleClose, companyInput }) {
+  const [companyName, setCompanyName] = useState(companyInput?.name || '');
+  const [companyType, setCompanyType] = useState(companyInput?.company_type.id || '');
+  const [mktActivity, setMktActivity] = useState(companyInput?.market_activity.id || '');
+  const [membership, setMembership] = useState(companyInput?.membership.id || '');
+  const [memberIndex, setmemberIndex] = useState(companyInput?.member_index || '');
+  const [isMainMember, setisMainMember] = useState(companyInput?.is_main_member || '');
+  const [addCompany] = useMutation(CREATE_COMPANY);
+  const [updateCompany] = useMutation(UPDATE_COMPANY);
 
-function NewCompanyForm({handleClose}) {
-  const [companyName, setCompanyName] = useState('');
-  const [companyType, setCompanyType] = useState('');
-  const [mktActivity, setMktActivity] = useState('');
-  const [membership, setMembership] = useState('');
-  const [memberIndex, setmemberIndex] = useState('');
-  const [isMainMember, setisMainMember] = useState('');
-  const [addCompany, { error }] = useMutation(CREATE_COMPANY);
-
-  const handleAddCompany = () => {
-    addCompany({
-      variables: {
-        input: {
-          name: companyName,
-          company_type_id: parseInt(companyType),
-          market_activity_id: parseInt(mktActivity),
-          member_index: Boolean(memberIndex),
-          is_main_member: Boolean(isMainMember),
-          membership_id: parseInt(membership)
+  const handleSumbit = () => {
+    const input = {
+      name: companyName,
+      company_type_id: parseInt(companyType),
+      market_activity_id: parseInt(mktActivity),
+      member_index: Boolean(memberIndex),
+      is_main_member: Boolean(isMainMember),
+      membership_id: parseInt(membership)
+    };
+    if (!companyInput) {
+      addCompany({
+        variables: {
+          input
         }
-      }
-    });
+      });
+      handleClose();
+    } else {
+      updateCompany({
+        variables: {
+          id: parseInt(companyInput.id),
+          input
+        }
+      });
+      handleClose();
+    }
   };
 
 
-  if (error) {
-    console.log(error);
-  }
   return (
-    <Dialog id="new-company-dialog" classes={{ paper: classes.paperNew }} open={true}>
+    <Dialog id="new-company-dialog"  open={true}>
       <DialogTitle
         id="form-dialog-title"
         style={{
@@ -160,21 +176,21 @@ function NewCompanyForm({handleClose}) {
             </Grid>
             <Grid container style={{ marginTop: '115px', marginBottom: '40px' }}>
               <Grid item xs={12} style={{ textAlign: 'center' }}>
-              <Button
-                id="cancel-new-company-button"
-                data-testid="cancel-new-company-button"
-                className={classes.cancelButton}
-                onClick={handleClose}
-            >
-              Cancel
-              </Button>
+                <Button
+                  id="cancel-new-company-button"
+                  data-testid="cancel-new-company-button"
+                  className={''}
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
                 <Button
                   id="create-new-company-button"
                   data-testid="create-new-company-button"
-                  className={classes.createButton}
-                  onClick={{ handleAddCompany }}
+                  className={''}
+                  onClick={handleSumbit}
                 >
-                  Create
+                  {!companyInput ? 'CREATE' : 'UPDATE'}
                 </Button>
               </Grid>
             </Grid>
@@ -185,4 +201,4 @@ function NewCompanyForm({handleClose}) {
   );
 }
 
-export default NewCompanyForm;
+export default CompanyForm;

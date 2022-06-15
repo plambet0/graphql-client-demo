@@ -2,7 +2,9 @@ import classes from './Company.module.css';
 import Card from './layout/Card';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Button } from '@material-ui/core';
+import CompanyForm from './CompanyForm';
 
 const DELETE_COMPANY = gql`
   mutation deleteCompany($id: Int!) {
@@ -12,6 +14,11 @@ const DELETE_COMPANY = gql`
 
 function Company(props) {
   const [deleteCompany] = useMutation(DELETE_COMPANY);
+  const [openUpdateForm, setopenUpdateForm] = useState(false);
+
+  const handleOpenUpdateForm = () => {
+    setopenUpdateForm(true);
+  };
 
   const deleteCompanyFunc = (id) => {
     deleteCompany({
@@ -20,6 +27,7 @@ function Company(props) {
       }
     });
   };
+
   return (
     <li key={props.id} className={classes.company}>
       <Card>
@@ -33,11 +41,14 @@ function Company(props) {
           <p>MARKET ACTIVITY: {props.market_activity.name}</p>
         </div>
         <div className={classes.actions}>
-          <Link to={`/updateCompany/${props.id}`}>
-            <button className={classes.update}>UPDATE COMPANY</button>
-          </Link>
-          <button onClick={() => deleteCompanyFunc(props.id)}>DELETE COMPANY</button>
+          <Button onClick={handleOpenUpdateForm} className={classes.update}>
+            UPDATE COMPANY
+          </Button>
+          <Button onClick={() => deleteCompanyFunc(props.id)}>DELETE COMPANY</Button>
         </div>
+        {openUpdateForm && (
+          <CompanyForm handleClose={() => setopenUpdateForm(false)} companyInput={props} />
+        )}
       </Card>
     </li>
   );
