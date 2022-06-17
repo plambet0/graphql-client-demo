@@ -91,6 +91,7 @@ function Companies() {
         id: parseInt(id)
       }
     });
+    alert('Company deleted')
   };
 
   useEffect(() => {

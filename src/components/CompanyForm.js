@@ -92,9 +92,9 @@ const gridItem = {
 function CompanyForm({ handleClose, companyInput }) {
   const classes = useStyles();
   const [companyName, setCompanyName] = useState(companyInput?.name || '');
-  const [companyType, setCompanyType] = useState(companyInput?.company_type.id || '');
-  const [mktActivity, setMktActivity] = useState(companyInput?.market_activity.id || '');
-  const [membership, setMembership] = useState(companyInput?.membership.id || '');
+  const [companyType, setCompanyType] = useState(companyInput?.company_type || '');
+  const [mktActivity, setMktActivity] = useState(companyInput?.market_activity || '');
+  const [membership, setMembership] = useState(companyInput?.membership || '');
   const [memberIndex, setmemberIndex] = useState(companyInput?.member_index || '');
   const [isMainMember, setisMainMember] = useState(companyInput?.is_main_member || '');
   const [addCompany] = useMutation(CREATE_COMPANY);
@@ -106,7 +106,6 @@ function CompanyForm({ handleClose, companyInput }) {
   const [allDataMemberships, setallDataMemberships] = useState([]);
   const { data:dataMarketActivities} = useQuery(GET_MARKETACTIVITIES);
   const [allDataMarketActivities, setallDataMarketActivities] = useState([]);
-
 
   useEffect(() => {
     if (dataCompanyTypes && dataCompanyTypes.companyTypes){
@@ -125,6 +124,7 @@ function CompanyForm({ handleClose, companyInput }) {
       setallDataMarketActivities(dataMarketActivities.marketActivities);
     }
   }, [dataMarketActivities]);
+
 
   const errorTexts = {
     companyName: 'Company name is required!',
@@ -286,6 +286,7 @@ function CompanyForm({ handleClose, companyInput }) {
                   onChange={(event, newValue) => {
                     setCompanyType(newValue.id);
                   }}
+                  defaultValue={companyType}
                 />
             </Grid>
             <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
@@ -318,6 +319,7 @@ function CompanyForm({ handleClose, companyInput }) {
                   onChange={(event, newValue) => {
                     setMktActivity(newValue.id);
                   }}
+                  defaultValue={mktActivity}
                 />
             </Grid>
             </Grid>
@@ -352,6 +354,7 @@ function CompanyForm({ handleClose, companyInput }) {
                   onChange={(event, newValue) => {
                     setMembership(newValue.id);
                   }}
+                  defaultValue={membership}
                 />
             </Grid>
             <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
