@@ -34,6 +34,26 @@ const GET_COMPANYTYPES = gql`
   }
 `;
 
+const GET_MEMBERSHIPS = gql`
+  query getMemberships {
+    memberships {
+      id
+      name
+    }
+  }
+`;
+
+const GET_MARKETACTIVITIES = gql`
+  query getMarketActivities {
+    marketActivities {
+      id
+      name
+    }
+  }
+`;
+
+
+
 const useStyles = makeStyles(() => ({
   paperNew: {
     maxWidth: '1400px',
@@ -80,14 +100,31 @@ function CompanyForm({ handleClose, companyInput }) {
   const [addCompany] = useMutation(CREATE_COMPANY);
   const [updateCompany] = useMutation(UPDATE_COMPANY);
   const [formErrors, setFormErrors] = useState({});
-  const { data, loading, error } = useQuery(GET_COMPANYTYPES);
-  const [allData, setAllData] = useState([]);
+  const { data: dataCompanyTypes } = useQuery(GET_COMPANYTYPES);
+  const [allDataCompanyTypes, setallDataCompanyTypes] = useState([]);
+  const { data:datamemberships} = useQuery(GET_MEMBERSHIPS);
+  const [allDataMemberships, setallDataMemberships] = useState([]);
+  const { data:dataMarketActivities} = useQuery(GET_MARKETACTIVITIES);
+  const [allDataMarketActivities, setallDataMarketActivities] = useState([]);
+
 
   useEffect(() => {
-    if (data && data.companyTypes){
-      setAllData(data.companyTypes)
+    if (dataCompanyTypes && dataCompanyTypes.companyTypes){
+      setallDataCompanyTypes(dataCompanyTypes.companyTypes);
     }
-  }, [data]);
+  }, [dataCompanyTypes]);
+
+  useEffect(() => {
+    if (datamemberships && datamemberships.memberships){
+      setallDataMemberships(datamemberships.memberships);
+    }
+  }, [datamemberships]);
+
+  useEffect(() => {
+    if (dataMarketActivities && dataMarketActivities.marketActivities){
+      setallDataMarketActivities(dataMarketActivities.marketActivities);
+    }
+  }, [dataMarketActivities]);
 
   const errorTexts = {
     companyName: 'Company name is required!',
@@ -138,7 +175,7 @@ function CompanyForm({ handleClose, companyInput }) {
     } else {
       const input = {
         name: companyName,
-        company_type_id: parseInt(companyType.id),
+        company_type_id: parseInt(companyType),
         market_activity_id: parseInt(mktActivity),
         member_index: Boolean(memberIndex),
         is_main_member: Boolean(isMainMember),
@@ -224,7 +261,7 @@ function CompanyForm({ handleClose, companyInput }) {
                   id="company-types-autocomplete"
                   data-testid="company-types-autocomplete"
                   style={gridItem}
-                  options={(allData)}
+                  options={(allDataCompanyTypes)}
                   getOptionLabel={(option) => option?.name}
                   renderInput={(params) => (
                     <TextField
@@ -246,64 +283,76 @@ function CompanyForm({ handleClose, companyInput }) {
                       helperText={formErrors.companyType ? formErrors.companyType : ''}
                     />
                   )}
-                  onChange={(e) => {
-                    setCompanyType(e.target.value);
+                  onChange={(event, newValue) => {
+                    setCompanyType(newValue.id);
                   }}
                 />
             </Grid>
             <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
-              <TextField
-                style={{ ...gridItem, marginTop: 0 }}
-                fullWidth
-                required
-                id="market-activity"
-                data-testid="market-activity-input-label"
-                label="Market Activity "
-                name="mktActivity"
-                error={formErrors.marketActivity !== null}
-                helperText={formErrors.marketActivity ? formErrors.marketActivity : ''}
-                value={mktActivity}
-                onChange={(e) => {
-                  setMktActivity(e.target.value);
-                }}
-                InputLabelProps={{
-                  style: {
-                    color: formErrors.marketActivity !== null ? 'red' : '#12497F'
-                  }
-                }}
-                inputProps={{
-                  style: { color: '#12497F' },
-                  'data-testid': 'market-activity-input-field'
-                }}
-              />
+            <Autocomplete
+                  id="market-activities-autocomplete"
+                  data-testid="market-activities-autocomplete"
+                  style={gridItem}
+                  options={(allDataMarketActivities)}
+                  getOptionLabel={(option) => option?.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required
+                      InputLabelProps={{
+                        style: {
+                          color: formErrors.marketActivity !== null ? 'red' : '#12497F'
+                        }
+                      }}
+                      inputProps={{
+                        ...params.inputProps,
+                        'data-testid': 'market-activity-input-field'
+                      }}
+                      label="Market Activity"
+                      data-testid="market-acivity-input-label"
+                      name="market-activity-input"
+                      error={formErrors.marketActivity !== null}
+                      helperText={formErrors.marketActivity ? formErrors.marketActivity : ''}
+                    />
+                  )}
+                  onChange={(event, newValue) => {
+                    setMktActivity(newValue.id);
+                  }}
+                />
             </Grid>
             </Grid>
             <Grid container>
             <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
-              <TextField
-                style={{ ...gridItem, marginTop: 0 }}
-                fullWidth
-                required
-                id="membership-id"
-                data-testid="membership-id-input-label"
-                label="Membership "
-                name="membership"
-                error={formErrors.membership !== null}
-                helperText={formErrors.membership ? formErrors.membership : ''}
-                value={membership}
-                onChange={(e) => {
-                  setMembership(e.target.value);
-                }}
-                InputLabelProps={{
-                  style: {
-                    color: formErrors.membership !== null ? 'red' : '#12497F'
-                  }
-                }}
-                inputProps={{
-                  style: { color: '#12497F' },
-                  'data-testid': 'membership-id-input-field'
-                }}
-              />
+            <Autocomplete
+                  id="memberships-autocomplete"
+                  data-testid="memberships-autocomplete"
+                  style={gridItem}
+                  options={(allDataMemberships)}
+                  getOptionLabel={(option) => option?.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required
+                      InputLabelProps={{
+                        style: {
+                          color: formErrors.membership!== null ? 'red' : '#12497F'
+                        }
+                      }}
+                      inputProps={{
+                        ...params.inputProps,
+                        'data-testid': 'membership-input-field'
+                      }}
+                      label="Membership"
+                      data-testid="membership-input-label"
+                      name="membership-input"
+                      error={formErrors.membership !== null}
+                      helperText={formErrors.membership ? formErrors.membership : ''}
+                    />
+                  )}
+                  onChange={(event, newValue) => {
+                    setMembership(newValue.id);
+                  }}
+                />
             </Grid>
             <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
               <TextField
