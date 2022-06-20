@@ -175,11 +175,11 @@ function CompanyForm({ handleClose, companyInput }) {
     } else {
       const input = {
         name: companyName,
-        company_type_id: parseInt(companyType),
-        market_activity_id: parseInt(mktActivity),
+        company_type_id: parseInt(companyType.id),
+        market_activity_id: parseInt(mktActivity.id),
         member_index: Boolean(memberIndex),
         is_main_member: Boolean(isMainMember),
-        membership_id: parseInt(membership)
+        membership_id: parseInt(membership.id)
       };
       if (!companyInput) {
         addCompany({
@@ -284,7 +284,7 @@ function CompanyForm({ handleClose, companyInput }) {
                     />
                   )}
                   onChange={(event, newValue) => {
-                    setCompanyType(newValue.id);
+                    setCompanyType(newValue);
                   }}
                   defaultValue={companyType}
                 />
@@ -317,7 +317,7 @@ function CompanyForm({ handleClose, companyInput }) {
                     />
                   )}
                   onChange={(event, newValue) => {
-                    setMktActivity(newValue.id);
+                    setMktActivity(newValue);
                   }}
                   defaultValue={mktActivity}
                 />
@@ -352,7 +352,7 @@ function CompanyForm({ handleClose, companyInput }) {
                     />
                   )}
                   onChange={(event, newValue) => {
-                    setMembership(newValue.id);
+                    setMembership(newValue);
                   }}
                   defaultValue={membership}
                 />
