@@ -64,7 +64,18 @@ function Companies() {
   const [query, setQuery] = useState('');
   const [company, setCompany] = useState(null);
   const [allData, setAllData] = useState([]);
-  const [deleteCompany] = useMutation(DELETE_COMPANY);
+  const [deleteCompany] = useMutation(DELETE_COMPANY,
+    {
+      update(cache, {data: {deleteCompany} }){
+        const { companies } = cache.readQuery({query : GET_COMPANIES});
+        cache.writeQuery({
+          query: GET_COMPANIES,
+          data: { companies: companies.concat([deleteCompany])},
+        });
+      }
+    }
+    
+  );
   const classes = useStyles();
 
   
@@ -187,7 +198,7 @@ function Companies() {
           checkboxSelection
           disableSelectionOnClick
         />
-        {company && <CompanyForm handleClose={() => setCompany(null)} companyInput={company} />}
+        {company && <CompanyForm handleClose={() => setCompany(null)} companyInput={company}/>}
       </div>
     </div>
   );
