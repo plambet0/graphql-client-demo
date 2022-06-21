@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from '@apollo/react-hooks';
 import { useEffect } from 'react';
+import { GET_COMPANIES } from './Companies';
 
 const CREATE_COMPANY = gql`
   mutation addCompany($input: AddCompanyInput!) {
@@ -185,6 +186,12 @@ function CompanyForm({ handleClose, companyInput }) {
         addCompany({
           variables: {
             input
+          }, update(cache, {data: {addCompany} }){
+            const { companies } = cache.readQuery({query : GET_COMPANIES});
+            cache.writeQuery({
+              query: GET_COMPANIES,
+              data: { companies: [addCompany,...companies]},
+            });
           }
         });
         handleClose();

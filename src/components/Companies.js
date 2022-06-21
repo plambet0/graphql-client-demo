@@ -10,7 +10,7 @@ import CompanyForm from './CompanyForm';
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 
-const GET_COMPANIES = gql`
+export const GET_COMPANIES = gql`
   query getCompanies {
     companies {
       id
@@ -108,7 +108,7 @@ function Companies() {
   useEffect(() => {
     if (data && data.companies) {
       if (query.length > 0) {
-        setAllData(data.companies.filter((c) => c.name.includes(query)));
+        setAllData(data.companies.filter((c) => c.name.toLowerCase().includes(query.toLowerCase())));
       } else {
         setAllData(data.companies);
       }
