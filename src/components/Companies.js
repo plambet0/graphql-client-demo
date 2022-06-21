@@ -159,14 +159,14 @@ function Companies() {
       headerName: 'Member index',
       headerClassName: 'super-app-theme--header',
       width: 200,
-      valueGetter: (params) => params.row.member_index
+      valueGetter: (params) => params.row.member_index === true ? "Yes" : "No"
     },
     {
       field: 'Is main member',
       headerName: 'Is main member',
       headerClassName: 'super-app-theme--header',
       width: 200,
-      valueGetter: (params) => params.row.is_main_member
+      valueGetter: (params) => params.row.is_main_member === true ? "Yes" : "No"
     },
     {
       field: 'Market Activity',
@@ -179,7 +179,7 @@ function Companies() {
       field: 'EDIT',
       headerName: 'EDIT',
       headerClassName: 'super-app-theme--header',
-      width: 120,
+      width: 140,
       renderCell: renderEdit
     }
     ,
@@ -187,7 +187,7 @@ function Companies() {
       field: 'DELETE',
       headerName: 'DELETE',
       headerClassName: 'super-app-theme--header',
-      width: 120,
+      width: 140,
       renderCell: renderDelete
     }
   ];
@@ -213,7 +213,6 @@ function Companies() {
           columns={columns}
           pageSize={20}
           rowsPerPageOptions={[20]}
-          checkboxSelection
           disableSelectionOnClick
         />
         </Box>
