@@ -243,6 +243,7 @@ function CompanyForm({ handleClose, companyInput }) {
             });
           }
         });
+        alert(`Company "${input.name}" successfully created!`)
         handleClose();
       } else {
         updateCompany({
@@ -251,6 +252,7 @@ function CompanyForm({ handleClose, companyInput }) {
             input
           }
         });
+        alert(`Company "${companyInput.name}" successfully updated!`)
         handleClose();
       }
     }

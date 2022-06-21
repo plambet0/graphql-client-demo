@@ -91,18 +91,18 @@ function Companies() {
     return <Button
      className={classes.Button} 
      style={{color: '#F44336', border: '1px solid ' + '#F44336'}} 
-     onClick={() => deleteCompanyFunc(row.id)}>
+     onClick={() => deleteCompanyFunc(row.id, row.name)}>
        DELETE
        </Button>
   }
 
-  const deleteCompanyFunc = (id) => {
+  const deleteCompanyFunc = (id, name) => {
     deleteCompany({
       variables: {
         id: parseInt(id)
       }
     });
-    alert('Company deleted')
+    alert(`Company "${name}" successfully deleted!`)
   };
 
   useEffect(() => {
