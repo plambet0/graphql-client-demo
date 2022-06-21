@@ -2,10 +2,12 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 // import classes from './Companies.module.css';
 // import Company from './Company';
-import { TextField } from '@material-ui/core';
+import { Box, TextField } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@material-ui/core';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CompanyForm from './CompanyForm';
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
@@ -81,19 +83,19 @@ function Companies() {
   
   
   const renderEdit = ({row}) => {
-    return <Button  
+    return <EditIcon 
     className={classes.Button}
     onClick={() => setCompany(row)}>
-      EDIT</Button>
+      EDIT</EditIcon>
   }
 
   const renderDelete = ({row}) => {
-    return <Button
+    return <DeleteIcon 
      className={classes.Button} 
      style={{color: '#F44336', border: '1px solid ' + '#F44336'}} 
      onClick={() => deleteCompanyFunc(row.id, row.name)}>
        DELETE
-       </Button>
+       </DeleteIcon >
   }
 
   const deleteCompanyFunc = (id, name) => {
@@ -128,55 +130,64 @@ function Companies() {
     {
       field: 'id',
       headerName: 'ID',
+      headerClassName: 'super-app-theme--header',
       width: 90
     },
     {
       field: 'Name',
       headerName: 'Name',
+      headerClassName: 'super-app-theme--header',
       width: 300,
       valueGetter: (params) => params.row.name
     },
     {
       field: 'Company type',
       headerName: 'Company type',
-      width: 150,
+      headerClassName: 'super-app-theme--header',
+      width: 200,
       valueGetter: (params) => params.row.company_type.name
     },
     {
       field: 'Membership',
       headerName: 'Membership',
-      width: 250,
+      headerClassName: 'super-app-theme--header',
+      width: 300,
       valueGetter: (params) => params.row.membership.name
     },
     {
       field: 'Member index',
       headerName: 'Member index',
-      width: 160,
+      headerClassName: 'super-app-theme--header',
+      width: 200,
       valueGetter: (params) => params.row.member_index
     },
     {
       field: 'Is main member',
       headerName: 'Is main member',
-      width: 160,
+      headerClassName: 'super-app-theme--header',
+      width: 200,
       valueGetter: (params) => params.row.is_main_member
     },
     {
       field: 'Market Activity',
       headerName: 'Market Activity',
-      width: 160,
+      headerClassName: 'super-app-theme--header',
+      width: 300,
       valueGetter: (params) => params.row.market_activity.name
     },
     {
       field: 'EDIT',
       headerName: 'EDIT',
-      width: 80,
+      headerClassName: 'super-app-theme--header',
+      width: 120,
       renderCell: renderEdit
     }
     ,
     {
       field: 'DELETE',
       headerName: 'DELETE',
-      width: 80,
+      headerClassName: 'super-app-theme--header',
+      width: 120,
       renderCell: renderDelete
     }
   ];
@@ -189,17 +200,24 @@ function Companies() {
           setQuery(e.target.value);
         }}
       />
-      <div style={{ height: 400, width: '100%' }}>
+        <Box 
+        sx={{
+          height: 900,
+          width: '100%',
+          '& .super-app-theme--header': {
+            backgroundColor: '#98a4d7',
+          },
+        }}>
         <DataGrid
           rows={allData}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={20}
+          rowsPerPageOptions={[20]}
           checkboxSelection
           disableSelectionOnClick
         />
+        </Box>
         {company && <CompanyForm handleClose={() => setCompany(null)} companyInput={company}/>}
-      </div>
     </div>
   );
 }
