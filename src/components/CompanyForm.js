@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, TextField, Grid } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, Button, TextField, Grid, RadioGroup, FormLabel, FormControlLabel, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useQuery } from '@apollo/react-hooks';
@@ -61,33 +61,79 @@ const useStyles = makeStyles(() => ({
     width: '1400px',
     height: '680px'
   },
+  createButton: {
+    background: '#0EAEFF',
+    width: '125px',
+    height: '36px',
+    border: '1px solid ' + '#2274BC',
+    fontFamily: 'Overpass',
+    fontSize: '14px',
+    lineHeight: '22px',
+    fontWeight: {semiBold: 600},
+    letterSpacing: '0px',
+    color: '#2274BC',
+    textTransform: 'uppercase',
+    borderRadius: '10px',
+    '&:hover': {
+      width: '125px',
+      height: '36px',
+      border: '1px solid ' + '#2274BC',
+      fontFamily: 'Overpass',
+      fontSize: '14px',
+      lineHeight: '22px',
+      fontWeight: {semiBold: 600},
+      letterSpacing: '0px',
+      color: '#2274BC',
+      textTransform: 'uppercase',
+      borderRadius: '10px',
+    }
+  },
   cancelButton: {
     width: '125px',
     height: '36px',
     border: '1px solid ' + '#2274BC',
-    color: '#2274BC',
     fontFamily: 'Overpass',
-    textTransform: 'uppercase',
-    borderRadius: '10px',
     fontSize: '14px',
     lineHeight: '22px',
+    fontWeight: {semiBold: 600},
     letterSpacing: '0px',
-    FontWeights: {
-      light: 300,
-      regular: 400,
-      semiBold: 600,
-      bold: 700
+    color: '#2274BC',
+    textTransform: 'uppercase',
+    borderRadius: '10px',
+    '&:hover': {
+      width: '125px',
+      height: '36px',
+      border: '1px solid ' + '#2274BC',
+      fontFamily: 'Overpass',
+      fontSize: '14px',
+      lineHeight: '22px',
+      fontWeight: {semiBold: 600},
+      letterSpacing: '0px',
+      color: '#2274BC',
+      textTransform: 'uppercase',
+      borderRadius: '10px',
     }
   }
 }));
 const leftGridStyle = {
-  paddingLeft: '11%',
-  paddingRight: '0.1%',
-};
+  margin: 'auto'
+}
 
 const gridItem = {
   height: '51px',
   marginTop: '30px'
+};
+const itemColor = {
+  color: '#12497F'
+};
+
+const errorObj = {
+  companyName: null,
+  companyType: null,
+  marketActivity: null,
+  memberIndex: null,
+  isMainMember: null,
+  membership: null
 };
 
 function CompanyForm({ handleClose, companyInput }) {
@@ -96,11 +142,11 @@ function CompanyForm({ handleClose, companyInput }) {
   const [companyType, setCompanyType] = useState(companyInput?.company_type || '');
   const [mktActivity, setMktActivity] = useState(companyInput?.market_activity || '');
   const [membership, setMembership] = useState(companyInput?.membership || '');
-  const [memberIndex, setmemberIndex] = useState(companyInput?.member_index || '');
-  const [isMainMember, setisMainMember] = useState(companyInput?.is_main_member || '');
+  const [memberIndex, setmemberIndex] = useState(companyInput?.member_index === true ? 'yes' : 'no' || '');
+  const [isMainMember, setisMainMember] = useState(companyInput?.is_main_member === true ? 'yes' : 'no' || '');
   const [addCompany] = useMutation(CREATE_COMPANY);
   const [updateCompany] = useMutation(UPDATE_COMPANY);
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState(errorObj);
   const { data: dataCompanyTypes } = useQuery(GET_COMPANYTYPES);
   const [allDataCompanyTypes, setallDataCompanyTypes] = useState([]);
   const { data:datamemberships} = useQuery(GET_MEMBERSHIPS);
@@ -136,8 +182,11 @@ function CompanyForm({ handleClose, companyInput }) {
     memberIndex: 'Member index is required'
   };
 
+  
+
+ 
+
   const handleSumbit = () => {
-    let hasErrors = false;
     const errors = {
       companyName: null,
       companyType: null,
@@ -146,7 +195,7 @@ function CompanyForm({ handleClose, companyInput }) {
       isMainMember: null,
       membership: null
     };
-
+    let hasErrors = false;
     if (!companyName || companyName.length === 0) {
       hasErrors = true;
       errors.companyName = errorTexts.companyName;
@@ -178,8 +227,8 @@ function CompanyForm({ handleClose, companyInput }) {
         name: companyName,
         company_type_id: parseInt(companyType.id),
         market_activity_id: parseInt(mktActivity.id),
-        member_index: Boolean(memberIndex),
-        is_main_member: Boolean(isMainMember),
+        member_index: Boolean(memberIndex === 'yes'),
+        is_main_member: Boolean(isMainMember === 'yes'),
         membership_id: parseInt(membership.id)
       };
       if (!companyInput) {
@@ -212,6 +261,7 @@ function CompanyForm({ handleClose, companyInput }) {
     id="new-company-dialog" 
     open={true} 
     classes={{ paper: classes.paperNew }}
+    BackdropProps={{ style: { background: '#12497FCC 0% 0% no-repeat padding-box' } }}
     >
       <DialogTitle
         id="form-dialog-title"
@@ -237,9 +287,9 @@ function CompanyForm({ handleClose, companyInput }) {
           Create company
         </span>
       </DialogTitle>
-      <DialogContent style={{ padding: 0, width:'170%'}}>
+      <DialogContent style={{ padding: 0}}>
         <Grid container style={{ marginTop: '38px' }}>
-          <Grid item xs={6} style={leftGridStyle}>
+          <Grid item xs={9} style={leftGridStyle}>
             <TextField
               style={{ ...gridItem, marginTop: 0 }}
               fullWidth
@@ -296,7 +346,7 @@ function CompanyForm({ handleClose, companyInput }) {
                   defaultValue={companyType}
                 />
             </Grid>
-            <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
+            <Grid item xs={6}>
             <Autocomplete
                   id="market-activities-autocomplete"
                   data-testid="market-activities-autocomplete"
@@ -330,8 +380,7 @@ function CompanyForm({ handleClose, companyInput }) {
                 />
             </Grid>
             </Grid>
-            <Grid container>
-            <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
+            <Grid item xs={12}>
             <Autocomplete
                   id="memberships-autocomplete"
                   data-testid="memberships-autocomplete"
@@ -363,61 +412,69 @@ function CompanyForm({ handleClose, companyInput }) {
                   }}
                   defaultValue={membership}
                 />
+            <Grid item xs={12} >
+            <div style={gridItem}>
+              <RadioGroup
+                row
+                defaultValue={isMainMember}
+                onChange={(event) => setisMainMember(event.currentTarget.value)}
+              >
+                <FormLabel
+                  style={{
+                    ...itemColor,
+                    marginTop: '13px',
+                    marginRight: '40px'
+                  }}
+                  component="legend"
+                >
+                  Is Main Member
+                </FormLabel>
+                <FormControlLabel
+                  value="yes"
+                  control={<Radio color="primary"/>}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value="no"
+                  control={<Radio color="primary"/>}
+                  label="No"
+                />
+              </RadioGroup>
+            </div>
+            <Grid/>
+            <Grid item xs={12}>
+            <div style={gridItem}>
+              <RadioGroup
+                row
+                defaultValue={memberIndex}
+                onChange={(event) => setmemberIndex(event.currentTarget.value)}
+              >
+                <FormLabel
+                  style={{
+                    ...itemColor,
+                    marginTop: '13px',
+                    marginRight: '40px'
+                  }}
+                  component="legend"
+                >
+                  Epra Watch Index
+                </FormLabel>
+                <FormControlLabel
+                  value="yes"
+                  control={<Radio color="primary"/>}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value="no"
+                  control={<Radio color="primary"/>}
+                  label="No"
+                />
+              </RadioGroup>
+            </div>
             </Grid>
-            <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
-              <TextField
-                style={{ ...gridItem, marginTop: 0 }}
-                fullWidth
-                required
-                id="memberIndex"
-                data-testid="memberIndex-input-label"
-                label="Member Index "
-                name="memberIndex"
-                error={formErrors.memberIndex !== null}
-                helperText={formErrors.memberIndex ? formErrors.memberIndex : ''}
-                value={memberIndex}
-                onChange={(e) => {
-                  setmemberIndex(e.target.value);
-                }}
-                InputLabelProps={{
-                  style: {
-                    color: formErrors.memberIndex !== null ? 'red' : '#12497F'
-                  }
-                }}
-                inputProps={{
-                  style: { color: '#12497F' },
-                  'data-testid': 'memberIndex-input-field'
-                }}
-              />
-            </Grid>
-            <Grid item xs={6} style={{ paddingRight: '2.5%' }}>
-              <TextField
-                style={{ ...gridItem, marginTop: 0 }}
-                fullWidth
-                required
-                id="isMainMember"
-                data-testid="isMainMember-input-label"
-                label="Is Main Member "
-                name="isMainMember"
-                error={formErrors.isMainMember !== null}
-                helperText={formErrors.isMainMember ? formErrors.isMainMember : ''}
-                value={isMainMember}
-                onChange={(e) => {
-                  setisMainMember(e.target.value);
-                }}
-                InputLabelProps={{
-                  style: {
-                    color: formErrors.isMainMember !== null ? 'red' : '#12497F'
-                  }
-                }}
-                inputProps={{
-                  style: { color: '#12497F' },
-                  'data-testid': 'isMainMember-input-field'
-                }}
-              />
             </Grid>
             <Grid container style={{ marginTop: '115px', marginBottom: '40px' }}>
-              <Grid item xs={6} style={{ textAlign: 'center' }}>
+              <Grid item xs={12} style={{ textAlign: 'center'}}>
                 <Button
                   id="cancel-new-company-button"
                   data-testid="cancel-new-company-button"
@@ -429,7 +486,7 @@ function CompanyForm({ handleClose, companyInput }) {
                 <Button
                   id="create-new-company-button"
                   data-testid="create-new-company-button"
-                  className={classes.cancelButton}
+                  className={classes.createButton}
                   onClick={handleSumbit}
                 >
                   {!companyInput ? 'CREATE' : 'UPDATE'}
