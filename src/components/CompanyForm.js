@@ -100,6 +100,7 @@ const useStyles = makeStyles(() => ({
     color: '#2274BC',
     textTransform: 'uppercase',
     borderRadius: '10px',
+    marginRight: '10px',
     '&:hover': {
       width: '125px',
       height: '36px',
