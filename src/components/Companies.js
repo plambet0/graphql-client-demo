@@ -11,6 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CompanyForm from './CompanyForm';
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
+import { hover } from '@testing-library/user-event/dist/hover';
 
 export const GET_COMPANIES = gql`
   query getCompanies {
@@ -57,6 +58,10 @@ const useStyles = makeStyles(() => ({
       regular: 400,
       semiBold: 600,
       bold: 700
+    },
+    '&:hover':{
+    color: 'blue',
+    boxShadow: '0px 2px 10px grey',
     }
   }
 }));
